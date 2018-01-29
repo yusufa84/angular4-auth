@@ -9,25 +9,31 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthService } from 'app/services/auth.service';
 import { RegisterComponent } from './components/register/register.component';
 import { StatusComponent } from './components/status/status.component';
+import { EnsureAuthenticated } from './services/ensure-authenticated.service';
+import { LoginRedirect } from './services/login-redirect.service';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    StatusComponent
+    StatusComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot([
-      {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent},
-      {path: 'status', component: StatusComponent}
+      {path: '', redirectTo: '/login', pathMatch: 'full'},
+      {path: 'login', component: LoginComponent, canActivate: [LoginRedirect]},
+      {path: 'logout', component: LogoutComponent},
+      {path: 'register', component: RegisterComponent, canActivate: [LoginRedirect]},
+      {path: 'status', component: StatusComponent, canActivate: [EnsureAuthenticated]}
     ])
   ],
-  providers: [AuthService],
+  providers: [AuthService, EnsureAuthenticated, LoginRedirect],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

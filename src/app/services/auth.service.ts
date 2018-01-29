@@ -13,6 +13,18 @@ export class AuthService {
     return this.http.post(url, user, {headers: this.headers}).toPromise();
   }
 
+  logout(token): Promise<any> {
+    console.log("Log out in auth.service.ts, token " + token)
+    let url: string = `${this.BASE_URL}/logout`;
+    let headers: Headers = new Headers({
+      'Content-Type': 'application/json', 
+      Authorization: `Bearer ${token}`
+    });
+    console.log(headers);
+    return this.http.get(url, {headers: headers}).toPromise();
+    //return this.http.post(url, user, {headers: this.headers}).toPromise();
+  }
+
   register(user: User): Promise<any> {
     let url: string = `${this.BASE_URL}/register`;
     return this.http.post(url, user, {headers: this.headers}).toPromise();
@@ -22,7 +34,7 @@ export class AuthService {
     let url: string = `${this.BASE_URL}/status`;
     let headers: Headers = new Headers({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Authorization': `Bearer ${token}`
     });
     return this.http.get(url, {headers: headers}).toPromise();
   }
